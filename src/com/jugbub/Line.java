@@ -27,31 +27,67 @@ public class Line {
         return line;
     }
 
-    public static boolean doesItHit(Line line, float x, float y){
-        Line tmpLine = new Line(line.vertices[0],line.vertices[1]);
+/*    public boolean doesItHit(Ray ray){
+        *//*Line tmpLine = new Line(this.vertices[0],this.vertices[1]);
         while (true){
-            if(withinRange(tmpLine,x,y)){
-                if (inMiddle(tmpLine,x,y))
+            if(withinRange(tmpLine,ray.x,ray.y)){
+                if (inMiddle(tmpLine,ray.x,ray.y))
                     return true;
             }else
                 return false;
-            tmpLine = subdivide(tmpLine,x,y);
-            System.out.println("Ray == X: "+x+" Y: "+y);
-            System.out.println("V1 == X:"+tmpLine.vertices[0].x+" Y:"+tmpLine.vertices[0].y);
-            System.out.println("V2 == X:"+tmpLine.vertices[1].x+" Y:"+tmpLine.vertices[1].y);
+            tmpLine = subdivide(tmpLine,ray.x,ray.y);
+            //System.out.println("Ray == X: "+ray.x+" Y: "+ ray.y);
+            //System.out.println("V1 == X:"+tmpLine.vertices[0].x+" Y:"+tmpLine.vertices[0].y);
+            //System.out.println("V2 == X:"+tmpLine.vertices[1].x+" Y:"+tmpLine.vertices[1].y);
+        }*//*
+        int lowN = 0;
+        int highN;
+
+        for (int i = 0; i < Math.pow(10,16)*100; i++) {
+            if(i == Math.pow(10,16)*100)
+                System.out.println("G");
         }
+    }*/
+
+
+    public float function(float x){
+        if(!(x == 0))
+            return xFunction(x);
+        else
+            return yFunction(x);
     }
 
-    public static boolean withinRange(Line line, float x, float y){
-        if(mostLeft(line.vertices)<x && x<mostRight(line.vertices))
-            if(mostLow(line.vertices)<y && y<mostHigh(line.vertices))
+    private float xFunction(float x){
+        int x1 = this.vertices[0].x;
+        int y1 = this.vertices[1].y;
+        int x2 = this.vertices[0].x;
+        int y2 = this.vertices[1].y;
+
+        float k = ((float)y1-y2)/((float)x1-x2);
+        float m =y1-k;
+        return k*x+m;
+    }
+    private float yFunction(float y){
+        int x1 = this.vertices[0].x;
+        int y1 = this.vertices[1].y;
+        int x2 = this.vertices[0].x;
+        int y2 = this.vertices[1].y;
+
+        float k = ((float)x1-x2)/((float)y1-y2);
+        float m =x1-k;
+        return k*y+m;
+    }
+
+/*    public static boolean withinRange(Line line, int x, int y){
+        if(mostLeft(line.vertices)<=x && x<=mostRight(line.vertices))
+            if(mostLow(line.vertices)<=y && y<=mostHigh(line.vertices))
                 return true;
         return false;
     }
 
-    public static boolean inMiddle(Line line,float x, float y){
-        float middleX = (line.vertices[0].x+line.vertices[1].x)/2;
-        float middleY = (line.vertices[0].y+line.vertices[1].y)/2;
+    public static boolean inMiddle(Line line,int x, int y){
+        int middleX = (line.vertices[0].x+line.vertices[1].x)/2;
+        int middleY = (line.vertices[0].y+line.vertices[1].y)/2;
 
         return x == middleX && y == middleY;
     }
@@ -87,5 +123,5 @@ public class Line {
         c = (float) Math.sqrt(Math.pow(a,2)+Math.pow(b,2));
 
         return c;
-    }
+    }*/
 }

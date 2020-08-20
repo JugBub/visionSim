@@ -7,8 +7,6 @@ import java.awt.event.ActionListener;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 
-import static com.jugbub.Line.createLine;
-
 public class Main {
 
 
@@ -21,22 +19,71 @@ public class Main {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        System.out.println((new Line(new Vertex(1, 1), new Vertex(2, 2))));
-        System.out.println((new Line(new Vertex(1, 1), new Vertex(2, 2)).vertices[0]));
+        //System.out.println((new Line(new Vertex(1, 1), new Vertex(2, 2))));
+        //System.out.println((new Line(new Vertex(1, 1), new Vertex(2, 2)).vertices[0]));
 
-        frame.setUndecorated(false);
+        createLevel(panel);
+
+        frame.setUndecorated(true);
 
         frame.setVisible(true);
         vertexMenu(panel);
         lineMenu(panel);
 
+        float test = 1F;
+
+        for (int i = 0; i <= 16; i++) {
+            System.out.print(String.format("%.16f",test/Math.pow(10,i)));
+            System.out.println(":" + i);
+        }
+
+        float n = 78.7232345677927645F;
+        float fakeN = 0F;
+        float lowN = 0F;
+        float highN = 100F;
+        int i = 0;
+
+        while (true) {
+            if(fakeN < n) {
+                lowN = fakeN;
+                fakeN = (lowN + highN) / 2;
+            }else if (fakeN > n){
+                highN = fakeN;
+                fakeN = (lowN + highN) / 2;
+            }else
+                break;
+            i++;
+            System.out.println(n);
+        }//////implement this!!!
+        
+
+        System.out.println(i);
+
+        Ray ray = new Ray(/*panel.vertices.get(0)*/ new Vertex(2,2));
+
         //System.out.println( panel.pixels.get(panel.pixels.size()-1).getX() + " " +  panel.pixels.get(panel.pixels.size()-1).getY());
         frame.setSize(/*(int)(panel.pixels.get(panel.pixels.size()-1).x),(int)panel.pixels.get(panel.pixels.size()-1).y*/ 500,500);
-        System.out.println(frame.getSize());
+        //System.out.println(frame.getSize());
 
         frame.setResizable(true);
-        Line line = createLine(new Vertex(1,1),new Vertex(2,2),panel);
-        System.out.println(Line.doesItHit(line, 1.0012f, 1.0012f));
+        //Line line = createLine(new Vertex(1,1),new Vertex(2,2),panel);
+        //System.out.println(Line.doesItHit(line, 1.0012f, 1.0012f));
+    }
+
+    public static void createLevel(BlockBreakerPanel panel){
+        for (int i = 0; i < 10; i++) {
+            panel.vertices.add(new Vertex((int) (Math.random() * 100),(int) (Math.random() * 100)));
+        }
+        for (int i = 0; i < 9; i++) {
+            panel.lines.add(Line.createLine(panel.vertices.get(i), panel.vertices.get(i), panel));
+        }
+        printLines(panel);
+    }
+
+    private static void printLines(BlockBreakerPanel panel){
+        for (int i = 0; i < panel.lines.size(); i++) {
+            System.out.println("v1: " + panel.lines.get(i).vertices[0].x + " , " + panel.lines.get(i).vertices[0].y + " v2: " + panel.lines.get(i).vertices[1].x + " , " + panel.lines.get(i).vertices[1].y);
+        }
     }
 
     public static void lineMenu(BlockBreakerPanel panel){
@@ -57,7 +104,7 @@ public class Main {
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panel.lines.add(createLine(panel.vertices.get(v1ComboBox.getSelectedIndex()),panel.vertices.get(v2ComboBox.getSelectedIndex()),panel));
+                panel.lines.add(Line.createLine(panel.vertices.get(v1ComboBox.getSelectedIndex()),panel.vertices.get(v2ComboBox.getSelectedIndex()),panel));
                 //panel.lines.add(Line.createLine(panel.vertices.get(v1ComboBox.getSelectedIndex()),panel.vertices.get(v2ComboBox.getSelectedIndex()),panel));
                 panel.lines.forEach((n) -> System.out.println(n.vertices[0] + " " + n.vertices[1]));
             }
@@ -97,7 +144,7 @@ public class Main {
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panel.vertices.add(new Vertex(Float.parseFloat(x.getText()),Float.parseFloat(y.getText())));
+                panel.vertices.add(new Vertex(Integer.parseInt(x.getText()),Integer.parseInt(y.getText())));
                 x.setText("");
                 y.setText("");
             }
