@@ -49,6 +49,89 @@ public class Line {
         }
     }*/
 
+    public static boolean doTheyIntersect(Line line1,Line line2){
+
+        float n = 0f;
+        float high = 100f;
+        float low = 0f;
+
+        float tmpN = n;
+
+        int i = 0;
+
+        while (true){
+            i++;
+            //System.out.println("X="+n+": " + "function 1: "+ line1.function(n) + "function 2: "+ line2.function(n));
+            //System.out.println("constraint: " + checkConstraint(line1, line2, low, high));
+            if(checkConstraint(line1, line2, low, high))
+                return false;
+            if(line1.function(n) > line2.function(n)){
+                low = n;
+                n  = (high+low)/2;
+                //System.out.println(1 + " " + n);
+            }else if(line1.function(n) < line2.function(n)){
+                high = n;
+                n  = (high+low)/2;
+                //System.out.println(2 + " " + (high));
+            }else {
+                //System.out.println(i);
+                //System .out.println(n);
+                return true;
+            }
+
+            //System.out.println(n);
+            //System.out.println(tmpN);
+
+            if(tmpN == n) {
+                //System.out.println(i);
+                return false;
+            }
+            tmpN = n;
+        }
+    }
+
+    private static boolean checkConstraint(Line line1, Line line2,float low,float high){
+        boolean[] gate = new boolean[2];
+
+        gate[0] = line1.isPastConstraint(low, high);
+        //System.out.println("gate 0: " + gate[0]);
+        gate[1] = line2.isPastConstraint(low, high);
+        //System.out.println("gate 1: " + gate[1]);
+
+        return gate[0] || gate[1];
+    }
+
+    private boolean isPastConstraint(float low, float high){
+        Vertex bigV = this.bigV();
+        Vertex smallV = this.smallV();
+
+        if(bigV.x < low)
+            return true;
+        if(smallV.x > high)
+            return true;
+
+        return false;
+    }
+
+    private Vertex bigV(){
+        Vertex v1 = this.vertices[0];
+        Vertex v2 = this.vertices[1];
+
+        if(v2.x < v1.x)
+                return v1;
+
+        return v2;
+    }
+    private Vertex smallV(){
+        Vertex v1 = this.vertices[0];
+        Vertex v2 = this.vertices[1];
+
+        if(v2.x>v1.x)
+                return v1;
+
+        return v2;
+    }
+
 
     public float function(float x){
         if(!(x == 0))
@@ -58,23 +141,24 @@ public class Line {
     }
 
     private float xFunction(float x){
-        int x1 = this.vertices[0].x;
-        int y1 = this.vertices[1].y;
-        int x2 = this.vertices[0].x;
-        int y2 = this.vertices[1].y;
+        float x1 = this.vertices[0].x;
+        float y1 = this.vertices[0].y;
+        float x2 = this.vertices[1].x;
+        float y2 = this.vertices[1].y;
 
         float k = ((float)y1-y2)/((float)x1-x2);
-        float m =y1-k;
+        float m =y1-x1*k;
         return k*x+m;
     }
     private float yFunction(float y){
-        int x1 = this.vertices[0].x;
-        int y1 = this.vertices[1].y;
-        int x2 = this.vertices[0].x;
-        int y2 = this.vertices[1].y;
+        float x1 = this.vertices[0].x;
+        float y1 = this.vertices[0].y;
+        float x2 = this.vertices[1].x;
+        float y2 = this.vertices[1].y;
 
-        float k = ((float)x1-x2)/((float)y1-y2);
-        float m =x1-k;
+        float k = ((float)(x1-x2))/((float)(y1-y2));
+        float m =x1-y1*k;
+        System.out.println(y2);
         return k*y+m;
     }
 

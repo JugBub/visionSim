@@ -37,7 +37,7 @@ public class Main {
             System.out.println(":" + i);
         }
 
-        float n = 78.7232345677927645F;
+        /*float n = 78.7232345677927645F;
         float fakeN = 0F;
         float lowN = 0F;
         float highN = 100F;
@@ -53,13 +53,22 @@ public class Main {
             }else
                 break;
             i++;
-            System.out.println(n);
-        }//////implement this!!!
-        
+            //System.out.println(n);
+        }//////implement this!!!*/
 
-        System.out.println(i);
 
-        Ray ray = new Ray(/*panel.vertices.get(0)*/ new Vertex(2,2));
+
+
+        //System.out.println(i);
+
+        //System.out.println(Line.doTheyMeet());
+        Border border = new Border(3);
+
+        Ray ray = new Ray(/*panel.vertices.get(0)*/ new Vertex(0.1f,1f));
+
+        System.out.println("Intersect With Border: " + border.rayIntersect(ray).x + " " + border.rayIntersect(ray).y);
+
+        System.out.println("ray result (y == 2): " + ray.yFunction(3));
 
         //System.out.println( panel.pixels.get(panel.pixels.size()-1).getX() + " " +  panel.pixels.get(panel.pixels.size()-1).getY());
         frame.setSize(/*(int)(panel.pixels.get(panel.pixels.size()-1).x),(int)panel.pixels.get(panel.pixels.size()-1).y*/ 500,500);

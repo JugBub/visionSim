@@ -2,7 +2,6 @@ package com.jugbub;
 
 public class Ray {
     Vertex target;
-    char[] direction;
     int x = 0;
     int y = 0;
 
@@ -11,25 +10,6 @@ public class Ray {
 
     Ray(Vertex target){
         this.target = target;
-        this.direction = this.getDirection();
-    }
-
-    private char[] getDirection(){
-        char[] direction = new char[2];
-        if(this.target.x > 0)
-            direction[0] = 'R';
-        else if(this.target.x<0)
-            direction[0] = 'L';
-        else
-            direction[0] = 'N';
-        if(this.target.y > 0)
-            direction[1] = 'U';
-        else if(this.target.y<0)
-            direction[1] = 'D';
-        else
-            direction[1] = 'N';
-
-        return direction;
     }
 
     public float function(float x){
@@ -39,18 +19,22 @@ public class Ray {
             return yFunction(x);
     }
 
-    private float xFunction(float x){
+    public float xFunction(float x){
         float k = ((float)(this.y - this.target.y)) / ((float)(this.x - this.target.x));
-        float m = this.y - k;
+        float m = this.y - this.x * k;
 
         return k * x + m;
     }
 
-    private float yFunction(float y){
+    public float yFunction(float y){
         float k = ((float)(this.x - this.target.x)) / ((float)(this.y - this.target.y));
-        float m = this.x - k;
+        float m = this.x - this.y*k;
 
         return k * y + m;
+    }
+
+    public Line toLine(){
+        return new Line(new Vertex(this.x,this.y), this.target);
     }
     /*    public void createFormula(){
         int x = this.target.x;

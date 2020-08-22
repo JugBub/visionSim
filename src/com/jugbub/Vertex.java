@@ -3,10 +3,10 @@ package com.jugbub;
 import java.util.ArrayList;
 
 public class Vertex {
-    int x,y;
+    float x,y;
     ArrayList<Line> lines = new ArrayList<>();
 
-    Vertex(int x, int y){
+    Vertex(float x, float y){
         this.x = x;
         this.y = y;
     }
