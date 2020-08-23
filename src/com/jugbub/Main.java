@@ -39,6 +39,7 @@ public class Main {
 
         Polygon polygon = new Polygon(line1,line2,line3);
 
+
         polygon.vertices.forEach((n)-> System.out.println(n.x));
 
         frame.setUndecorated(true);
@@ -46,13 +47,6 @@ public class Main {
         frame.setVisible(true);
         vertexMenu(panel);
         lineMenu(panel);
-
-        float test = 1F;
-
-        for (int i = 0; i <= 16; i++) {
-            System.out.print(String.format("%.16f",test/Math.pow(10,i)));
-            System.out.println(":" + i);
-        }
 
         /*float n = 78.7232345677927645F;
         float fakeN = 0F;
@@ -81,7 +75,7 @@ public class Main {
         //System.out.println(Line.doTheyMeet());
         Border border = new Border(3);
 
-        Ray ray = new Ray(/*panel.vertices.get(0)*/ new Vertex(0.1f,1f));
+        Ray ray = new Ray(/*panel.vertices.get(0)*/ panel.player.x,panel.player.y,new Vertex(0.1f,1f));
 
         System.out.println("Intersect With Border: " + border.rayIntersect(ray).x + " " + border.rayIntersect(ray).y);
 

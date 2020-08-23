@@ -8,7 +8,9 @@ public class Ray {
     //float[] formula = new float[2];
 
 
-    Ray(Vertex target){
+    Ray(int x,int y,Vertex target){
+        this.x = x;
+        this.y = y;
         this.target = target;
     }
 

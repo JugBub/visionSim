@@ -40,4 +40,31 @@ public class Border {
 
         return new Vertex(0,0);
     }
+
+    public ArrayList<Vertex> verticesWithinBorder(BlockBreakerPanel panel){
+        ArrayList<Vertex> verticesWithin = new ArrayList<>();
+        for (int i = 0; i < panel.vertices.size(); i++) {
+            float x = panel.vertices.get(i).x;
+            float y = panel.vertices.get(i).y;
+            float distance = (float) Math.sqrt((float)  (Math.pow(x-this.x,2))  +   (float)    (Math.pow(y-this.y,2))  );
+
+            if(distance < this.radius)
+                verticesWithin.add(panel.vertices.get(i));
+        }
+
+        return verticesWithin;
+    }
+    public ArrayList<Pixel> pixelsWithinBorder(BlockBreakerPanel panel){
+        ArrayList<Pixel> pixelsWithin = new ArrayList<>();
+        for (int i = 0; i < panel.pixels.size(); i++) {
+            float x = panel.pixels.get(i).x;
+            float y = panel.pixels.get(i).y;
+            float distance = (float) Math.sqrt((float)  (Math.pow(x-this.x,2))  +   (float)    (Math.pow(y-this.y,2))  );
+
+            if(distance < this.radius)
+                pixelsWithin.add(panel.pixels.get(i));
+        }
+
+        return pixelsWithin;
+    }
 }

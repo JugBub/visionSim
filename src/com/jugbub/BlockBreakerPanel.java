@@ -11,7 +11,7 @@ public class BlockBreakerPanel extends JPanel implements KeyListener {
 
 
     ArrayList<Pixel> pixels;
-    Player player = new Player(50,50, 10);
+    Player player = new Player(50,50, 30);
     ArrayList<Vertex> vertices = new ArrayList<>();
     ArrayList<Line> lines = new ArrayList<>();
     boolean init = true;
@@ -29,6 +29,8 @@ public class BlockBreakerPanel extends JPanel implements KeyListener {
         addKeyListener(this);
         setFocusable(true);
     }
+
+
 
     private ArrayList<Pixel> initPixels(int screenW,int screenH,int size){
         ArrayList<Pixel> pixels = new ArrayList<>();
@@ -61,20 +63,34 @@ public class BlockBreakerPanel extends JPanel implements KeyListener {
     }
 
     private void resetPixels(){
-
+        this.pixels.forEach((n)-> n.visible=true);
+        ArrayList<Pixel> visible = this.player.border.pixelsWithinBorder(this);
         for (int i = 0; i < this.pixels.size(); i++) {
-            this.pixels.get(i).visible = true;
-            if(this.pixels.get(i).hasPlayer){
-                if(!(this.pixels.get(i).x == this.player.x) || !(this.pixels.get(i).y == this.player.y))
-                    this.pixels.get(i).hasPlayer = false;
-            }else {
-                //check if same pos as player
-                if(this.pixels.get(i).x == this.player.x && this.pixels.get(i).y == this.player.y)
-                    this.pixels.get(i).hasPlayer = true;
-            }
+
+
+            checkIfBorder(visible,i);
+
+
+            this.checkIfPlayer(i);
 
         }
 
+    }
+
+    private void checkIfBorder(ArrayList<Pixel> visible,int i){
+        if (!visible.contains(this.pixels.get(i)))
+            this.pixels.get(i).visible = false;
+    }
+
+    private void checkIfPlayer(int i){
+        if(this.pixels.get(i).hasPlayer){
+            if(!(this.pixels.get(i).x == this.player.x) || !(this.pixels.get(i).y == this.player.y))
+                this.pixels.get(i).hasPlayer = false;
+        }else {
+            //check if same pos as player
+            if(this.pixels.get(i).x == this.player.x && this.pixels.get(i).y == this.player.y)
+                this.pixels.get(i).hasPlayer = true;
+        }
     }
 
     private static boolean isThereVertexAtPos(ArrayList<Vertex> vertices,int x, int y){
@@ -87,11 +103,21 @@ public class BlockBreakerPanel extends JPanel implements KeyListener {
         return false;
     }
 
+    private void initBorder(){
+        this.player.border.x = this.player.x;
+        this.player.border.y = this.player.y;
+    }
+
+    private void initGame(){
+        this.pixels = initPixels(100, 100, 5);
+        initBorder();
+    }
+
     public void paintComponent(Graphics g){
         //paddle.draw(g, this);
 
         if(this.init) {
-            this.pixels = initPixels(100, 100, 5);
+            initGame();
             this.init = false;
         }
         this.resetPixels();
@@ -132,12 +158,16 @@ public class BlockBreakerPanel extends JPanel implements KeyListener {
     private void movement(KeyEvent e){
         if(e.getKeyCode() == KeyEvent.VK_D){
             this.player.x = (100 +(this.player.x + 1)) % 100;
+            this.player.border.x = this.player.x;
         }if(e.getKeyCode() == KeyEvent.VK_A){
             this.player.x = (100 +(this.player.x - 1)) % 100;
+            this.player.border.x = this.player.x;
         }if(e.getKeyCode() == KeyEvent.VK_W){
             this.player.y = (100 +(this.player.y - 1)) % 100;
+            this.player.border.y = this.player.y;
         }if(e.getKeyCode() == KeyEvent.VK_S){
             this.player.y = (100 +(this.player.y + 1)) % 100;
+            this.player.border.y = this.player.y;
         }
     }
 

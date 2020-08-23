@@ -1,12 +1,15 @@
 package com.jugbub;
 
+import java.awt.event.MouseAdapter;
 import java.nio.file.LinkOption;
 
 public class Line {
     Vertex[] vertices;
+    float length;
 
     Line(Vertex v1, Vertex v2){
         this.vertices = new Vertex[]{v1, v2};
+        this.length = (float) Math.sqrt((float)  (Math.pow(v1.x-v2.x,2))   +   (float)  (Math.pow(v1.y-v2.y,2)) );
         //System.out.println(1);
     }
 

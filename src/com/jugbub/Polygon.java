@@ -89,5 +89,32 @@ public class Polygon {
 
         return (float) Math.sqrt(a+b);
     }
+    private Line closestLine(Vertex p){
+
+        float a = p.y - this.lines.get(0).function(p.x);
+        float b = p.y - this.lines.get(1).function(p.x);
+        float c = p.y - this.lines.get(2).function(p.x);
+
+        float min = Math.min(Math.min(a, b), Math.min(b, c));
+
+        if ((min == a))
+            return this.lines.get(0);
+        else if ((min == b))
+            return this.lines.get(1);
+        else
+            return this.lines.get(2);
+    }
+
+    public boolean isWithin(Vertex p){
+        Line line = this.closestLine(p);
+
+        float pDistance = pyth(p.x-this.x,p.y-this.y);
+        float lineDistance = pyth(p.x-this.x,this.x-line.function(p.x));
+
+        if(pDistance <= lineDistance)
+            return true;
+
+        return false;
+    }
 
 }
