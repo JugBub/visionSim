@@ -22,7 +22,24 @@ public class Main {
         //System.out.println((new Line(new Vertex(1, 1), new Vertex(2, 2))));
         //System.out.println((new Line(new Vertex(1, 1), new Vertex(2, 2)).vertices[0]));
 
+
+
+
+
         createLevel(panel);
+
+/*        Line line1 = new Line(panel.vertices.get(0),panel.vertices.get(1));
+        Line line2 = new Line(panel.vertices.get(1),panel.vertices.get(2));
+        Line line3 = new Line(panel.vertices.get(2),panel.vertices.get(0));*/
+
+        Line line1 = new Line(new Vertex(10,0),new Vertex(10,30));
+        Line line2 = new Line(line1.vertices[1],new Vertex(70,0));
+        Line line3 = new Line(line2.vertices[1],line1.vertices[0]);
+
+
+        Polygon polygon = new Polygon(line1,line2,line3);
+
+        polygon.vertices.forEach((n)-> System.out.println(n.x));
 
         frame.setUndecorated(true);
 
