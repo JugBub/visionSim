@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class Border {
     ArrayList<Vertex> vertices = new ArrayList<>();
     ArrayList<Line> lines = new ArrayList<>();
-    int radius;
+    float radius;
     int x,y;
 
-    Border(int r){
+    Border(float r){
 
         this.radius = r;
 
@@ -54,17 +54,23 @@ public class Border {
 
         return verticesWithin;
     }
-    public ArrayList<Pixel> pixelsWithinBorder(BlockBreakerPanel panel){
-        ArrayList<Pixel> pixelsWithin = new ArrayList<>();
+    public void pixelsWithinBorder(BlockBreakerPanel panel){
         for (int i = 0; i < panel.pixels.size(); i++) {
             float x = panel.pixels.get(i).x;
             float y = panel.pixels.get(i).y;
             float distance = (float) Math.sqrt((float)  (Math.pow(x-this.x,2))  +   (float)    (Math.pow(y-this.y,2))  );
 
-            if(distance < this.radius)
-                pixelsWithin.add(panel.pixels.get(i));
+            if(distance <= this.radius)
+                panel.pixels.get(i).visible = true;
         }
+    }
 
-        return pixelsWithin;
+    public void pixelWithinBorder(Pixel p){
+        float x = p.x;
+        float y =p.y;
+        float distance = (float) Math.sqrt((float)  (Math.pow(x-this.x,2))  +   (float)    (Math.pow(y-this.y,2))  );
+
+        if(distance <= this.radius)
+            p.visible = true;
     }
 }

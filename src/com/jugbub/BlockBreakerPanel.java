@@ -11,10 +11,13 @@ public class BlockBreakerPanel extends JPanel implements KeyListener {
 
 
     ArrayList<Pixel> pixels;
-    Player player = new Player(50,50, 30);
+    Player player;
     ArrayList<Vertex> vertices = new ArrayList<>();
     ArrayList<Line> lines = new ArrayList<>();
     boolean init = true;
+    int width,height;
+    int pixelSize;
+    Polygon polygon;
 
 /*
     ArrayList<Block> blocks = new ArrayList<>();
@@ -24,7 +27,13 @@ public class BlockBreakerPanel extends JPanel implements KeyListener {
 */
 
     BlockBreakerPanel(){
+        Line line1 = new Line(new Vertex(10,0),new Vertex(10,30));
+        Line line2 = new Line(line1.vertices[1],new Vertex(70,0));
+        Line line3 = new Line(line2.vertices[1],line1.vertices[0]);
 
+        this.polygon = new Polygon(line1,line2,line3);
+
+        this.player = new Player(50,50, (float)(Math.min(width,height)*.3));
 
         addKeyListener(this);
         setFocusable(true);
@@ -32,19 +41,15 @@ public class BlockBreakerPanel extends JPanel implements KeyListener {
 
 
 
-    private ArrayList<Pixel> initPixels(int screenW,int screenH,int size){
+    private ArrayList<Pixel> initPixels(int width,int height,int size){
         ArrayList<Pixel> pixels = new ArrayList<>();
 
-        for (int i = 0; i < screenW; i++) {
-            for (int j = 0; j < screenH; j++) {
-                //System.out.println("i:"+i+"j:"+j);
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 pixels.add(new Pixel(i,j,i*size,j*size,size));
-                pixels.get(i*screenH+j).size = size;
-                //pixels.get(i*screenH+j).width = size;
-                if(i == 0 || j == 99 || j == 0 || i == 99)
-                    pixels.get(i*screenH+j).visible=false;
+                pixels.get(i*height+j).size = size;
                 if(isThereVertexAtPos(vertices,i,j))
-                    pixels.get(i*screenH+j).visibleColor = new Color(0,0,0);
+                    pixels.get(i*height+j).visibleColor = new Color(0,0,0);
             }
         }
         return pixels;
@@ -62,27 +67,44 @@ public class BlockBreakerPanel extends JPanel implements KeyListener {
 
     }
 
-    private void resetPixels(){
-        this.pixels.forEach((n)-> n.visible=true);
-        ArrayList<Pixel> visible = this.player.border.pixelsWithinBorder(this);
-        for (int i = 0; i < this.pixels.size(); i++) {
-
-
-            checkIfBorder(visible,i);
-
-
-            this.checkIfPlayer(i);
-
+    private void isPixelVisible(Pixel p,Polygon polygon){
+        this.player.border.pixelWithinBorder(p);
+        if(!polygon.isWithin(p)) {
+            p.visible = false;
         }
+    }
+
+    private void resetPixels(Polygon polygon){
+        System.out.println("start Pixels");
+        this.pixels.forEach((n)-> n.visible=false);
+        System.out.println("done Pixels");
+
+/*        System.out.println("start border search");
+        //this.player.border.pixelsWithinBorder(this);
+        System.out.println("done border search");*/
+        System.out.println("start Visibility");
+        this.pixels.forEach((n)->this.isPixelVisible(n,this.polygon));
+        System.out.println("done Visibility");
+/*        for (int i = 0; i < this.pixels.size(); i++) {
+
+            //this.paintPlayer(i);
+
+
+
+            System.out.println("start within polygon");
+
+            System.out.println("done within polygon");
+            //System.out.println(polygon.isWithin(this.pixels.get(i)));
+        }*/
 
     }
 
-    private void checkIfBorder(ArrayList<Pixel> visible,int i){
+    private void paintBorder(ArrayList<Pixel> visible,int i){
         if (!visible.contains(this.pixels.get(i)))
             this.pixels.get(i).visible = false;
     }
 
-    private void checkIfPlayer(int i){
+    private void paintPlayer(int i){
         if(this.pixels.get(i).hasPlayer){
             if(!(this.pixels.get(i).x == this.player.x) || !(this.pixels.get(i).y == this.player.y))
                 this.pixels.get(i).hasPlayer = false;
@@ -109,19 +131,19 @@ public class BlockBreakerPanel extends JPanel implements KeyListener {
     }
 
     private void initGame(){
-        this.pixels = initPixels(100, 100, 5);
+        this.pixels = initPixels(this.width, this.height, this.pixelSize);
         initBorder();
     }
 
     public void paintComponent(Graphics g){
-        //paddle.draw(g, this);
-
         if(this.init) {
             initGame();
             this.init = false;
+
         }
-        this.resetPixels();
-        //this.updatePixels();
+
+        this.resetPixels(this.polygon);
+
         this.pixels.forEach((n) -> n.paint(g,n));
     }
 
@@ -137,22 +159,23 @@ public class BlockBreakerPanel extends JPanel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_ENTER){
-            new Thread(() -> {
-                while (true){
-
-                    this.update();
-                    System.out.println("running");
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException err) {
-                        err.printStackTrace();
-                    }
-                }
-            }).start();
-        }
         this.movement(e);
 
+    }
+
+    public void runGame(){
+        new Thread(() -> {
+            while (true){
+
+                this.update();
+                //System.out.println("running");
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException err) {
+                    err.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void movement(KeyEvent e){

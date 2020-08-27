@@ -17,62 +17,18 @@ public class Main {
 
         frame.getContentPane().add(panel);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //System.out.println((new Line(new Vertex(1, 1), new Vertex(2, 2))));
-        //System.out.println((new Line(new Vertex(1, 1), new Vertex(2, 2)).vertices[0]));
 
 
-
-
+        createMenu(panel,frame);
 
         createLevel(panel);
 
-/*        Line line1 = new Line(panel.vertices.get(0),panel.vertices.get(1));
-        Line line2 = new Line(panel.vertices.get(1),panel.vertices.get(2));
-        Line line3 = new Line(panel.vertices.get(2),panel.vertices.get(0));*/
-
-        Line line1 = new Line(new Vertex(10,0),new Vertex(10,30));
-        Line line2 = new Line(line1.vertices[1],new Vertex(70,0));
-        Line line3 = new Line(line2.vertices[1],line1.vertices[0]);
 
 
-        Polygon polygon = new Polygon(line1,line2,line3);
 
-
-        polygon.vertices.forEach((n)-> System.out.println(n.x));
-
-        frame.setUndecorated(true);
-
-        frame.setVisible(true);
         vertexMenu(panel);
         lineMenu(panel);
 
-        /*float n = 78.7232345677927645F;
-        float fakeN = 0F;
-        float lowN = 0F;
-        float highN = 100F;
-        int i = 0;
-
-        while (true) {
-            if(fakeN < n) {
-                lowN = fakeN;
-                fakeN = (lowN + highN) / 2;
-            }else if (fakeN > n){
-                highN = fakeN;
-                fakeN = (lowN + highN) / 2;
-            }else
-                break;
-            i++;
-            //System.out.println(n);
-        }//////implement this!!!*/
-
-
-
-
-        //System.out.println(i);
-
-        //System.out.println(Line.doTheyMeet());
         Border border = new Border(3);
 
         Ray ray = new Ray(/*panel.vertices.get(0)*/ panel.player.x,panel.player.y,new Vertex(0.1f,1f));
@@ -81,14 +37,17 @@ public class Main {
 
         System.out.println("ray result (y == 2): " + ray.yFunction(3));
 
-        //System.out.println( panel.pixels.get(panel.pixels.size()-1).getX() + " " +  panel.pixels.get(panel.pixels.size()-1).getY());
-        frame.setSize(/*(int)(panel.pixels.get(panel.pixels.size()-1).x),(int)panel.pixels.get(panel.pixels.size()-1).y*/ 500,500);
-        //System.out.println(frame.getSize());
-
+        ///frame
+        frame.setUndecorated(true);
+        frame.setSize(500,500);
         frame.setResizable(true);
-        //Line line = createLine(new Vertex(1,1),new Vertex(2,2),panel);
-        //System.out.println(Line.doesItHit(line, 1.0012f, 1.0012f));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.setVisible(true);
+
+
     }
+
+
 
     public static void createLevel(BlockBreakerPanel panel){
         for (int i = 0; i < 10; i++) {
@@ -104,6 +63,58 @@ public class Main {
         for (int i = 0; i < panel.lines.size(); i++) {
             System.out.println("v1: " + panel.lines.get(i).vertices[0].x + " , " + panel.lines.get(i).vertices[0].y + " v2: " + panel.lines.get(i).vertices[1].x + " , " + panel.lines.get(i).vertices[1].y);
         }
+    }
+
+    private static void createMenu(BlockBreakerPanel panel,JFrame main){
+        JFrame frame = new JFrame();
+        frame.setTitle("Menu");
+        frame.setSize(220,170);
+
+        JLabel widthLabel = new JLabel("Width:");
+        JLabel heightLabel = new JLabel("Height:");
+        JLabel sizeLabel = new JLabel("Size:");
+        JTextField widthText = new JTextField("100");
+        JTextField heightText = new JTextField("100");
+        JTextField sizeText = new JTextField("5");
+
+        JButton start = new JButton("Start");
+
+        int lazy = 15;
+
+        widthLabel.setBounds(20+lazy,20,50,25);
+        heightLabel.setBounds(70+lazy,20,50,25);
+        sizeLabel.setBounds(120+lazy,20,50,25);
+
+        widthText.setBounds(20+lazy,45,40,25);
+        heightText.setBounds(70+lazy,45,40,25);
+        sizeText.setBounds(120+lazy,45,40,25);
+
+        start.setBounds(45+lazy,80,90,30);
+        start.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.width = Integer.parseInt(widthText.getText());
+                panel.height = Integer.parseInt(heightText.getText());
+                panel.pixelSize = Integer.parseInt(sizeText.getText());
+
+                main.setSize(panel.width*panel.pixelSize,panel.height*panel.pixelSize);
+                main.setVisible(true);
+                panel.runGame();
+            }
+        });
+
+
+        frame.add(widthLabel);
+        frame.add(heightLabel);
+        frame.add(sizeLabel);
+        frame.add(widthText);
+        frame.add(heightText);
+        frame.add(sizeText);
+
+        frame.add(start);
+
+        frame.setLayout(null);
+        frame.setVisible(true);
     }
 
     public static void lineMenu(BlockBreakerPanel panel){

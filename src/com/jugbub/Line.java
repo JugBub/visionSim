@@ -141,6 +141,14 @@ public class Line {
             return xFunction(x);
         else
             return yFunction(x);
+
+    }
+
+    public boolean straightUp(){
+        if(this.vertices[0].x==this.vertices[1].x)
+            return true;
+        else
+            return false;
     }
 
     private float xFunction(float x){
@@ -151,6 +159,8 @@ public class Line {
 
         float k = ((float)y1-y2)/((float)x1-x2);
         float m =y1-x1*k;
+        if(Float.isNaN(k*x+m))
+            return this.vertices[0].x;
         return k*x+m;
     }
     private float yFunction(float y){

@@ -7,7 +7,7 @@ public class Player {
     TriangleNetwork triangleNetwork = new TriangleNetwork();
     Border border;
 
-    Player(int x,int y, int radius){
+    Player(int x,int y, float radius){
         this.x = x;
         this.y = y;
         border = new Border(radius);
